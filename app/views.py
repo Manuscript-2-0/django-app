@@ -3,12 +3,21 @@ from rest_framework.generics import GenericAPIView
 from app.serializers import EventSerializer
 from app.models import Event, ManuscriptUser
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 
 
 class CreateListEvents(mixins.ListModelMixin, mixins.CreateModelMixin, GenericAPIView):
     """ View class for Create a new event and list all the events """
     serializer_class = EventSerializer
     queryset = Event.objects.all()
+
+    def get_permissions(self):
+        method = self.request.method
+        if method == 'GET':
+            return []
+        else:
+            return [IsAuthenticated()]
 
     def get(self, request, *args, **kwargs):
         """ Get all events, here we are using the .list method available in the mixins.ListModelMixin """
@@ -27,6 +36,15 @@ class RetrieveUpdateDeleteEvent(mixins.RetrieveModelMixin, mixins.UpdateModelMix
     """ View class for Retrieve, Update and Delete a event """
     serializer_class = EventSerializer
     queryset = Event.objects.all()
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+
+    def get_permissions(self):
+        method = self.request.method
+        if method == 'GET':
+            return []
+        else:
+            return [IsAuthenticated()]
 
     def get(self, request, *args, **kwargs):
         """ .retrieve method available in the mixins.RetrieveModelMixin """
