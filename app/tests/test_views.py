@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from app.models import ManuscriptUser, Event, EventType
+from app.models import User, Event, EventType
 from rest_framework.test import APIClient
 import json
 from unittest.mock import patch
@@ -10,10 +10,7 @@ import datetime
 class CreateListEvents(TestCase):
     def setUp(self) -> None:
         user = User.objects.create(
-            username='test_user', first_name='test', last_name='user',)
-        self.manuscript_user = ManuscriptUser.objects.create(
-            user=user
-        )
+            username='test_user', )
         self.client = APIClient()
         self.client.force_authenticate(user=user)
         EventType.objects.create(name='test_event_type')
@@ -23,7 +20,7 @@ class CreateListEvents(TestCase):
                 type=EventType.objects.first(),
                 start_date='2020-01-01',
                 end_date='2020-01-01',
-                author=self.manuscript_user
+                author=user
             )
 
     # @patch('app.views.CreateListEvents.get')
@@ -78,10 +75,8 @@ class CreateListEvents(TestCase):
 class RetrieveUpdateDeleteEventTest(TestCase):
     def setUp(self) -> None:
         user = User.objects.create(
-            username='test_user', first_name='test', last_name='user',)
-        self.manuscript_user = ManuscriptUser.objects.create(
-            user=user
-        )
+            username='test_user', )
+
         self.client = APIClient()
         self.client.force_authenticate(user=user)
         EventType.objects.create(name='test_event_type')
@@ -91,7 +86,7 @@ class RetrieveUpdateDeleteEventTest(TestCase):
                 type=EventType.objects.first(),
                 start_date='2020-01-01',
                 end_date='2020-01-01',
-                author=self.manuscript_user
+                author=user
             )
 
     def test_get_event_should_return_event_when_user_is_not_authenticated(self):

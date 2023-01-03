@@ -1,11 +1,5 @@
 from rest_framework import serializers
-from app.models import ManuscriptUser, Event
-
-
-class ManuscriptUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ManuscriptUser
-        fields = '__all__'
+from app.models import Event
 
 
 class EventSerializer(serializers.ModelSerializer):

@@ -1,7 +1,7 @@
 from rest_framework import mixins
 from rest_framework.generics import GenericAPIView
 from app.serializers import EventSerializer
-from app.models import Event, ManuscriptUser
+from app.models import Event, User
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
@@ -25,8 +25,7 @@ class CreateListEvents(mixins.ListModelMixin, mixins.CreateModelMixin, GenericAP
 
     def post(self, request, *args, **kwargs):
         """ Create a new event, here we are using the .create method available in the mixins.CreateModelMixin """
-        request.data['author'] = get_object_or_404(
-            ManuscriptUser.objects, user=request.user).id
+        request.data['author'] = request.user.id
         return self.create(request, *args, **kwargs)
 
 
@@ -36,8 +35,6 @@ class RetrieveUpdateDeleteEvent(mixins.RetrieveModelMixin, mixins.UpdateModelMix
     """ View class for Retrieve, Update and Delete a event """
     serializer_class = EventSerializer
     queryset = Event.objects.all()
-    permission_classes = (IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
 
     def get_permissions(self):
         method = self.request.method
@@ -51,8 +48,7 @@ class RetrieveUpdateDeleteEvent(mixins.RetrieveModelMixin, mixins.UpdateModelMix
         return self.retrieve(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
-        request.data['author'] = get_object_or_404(
-            ManuscriptUser.objects, user=request.user).id
+        request.data['author'] = request.user.id
         """ .partial_update method available in the mixins.UpdateModelMixin """
         return self.partial_update(request, *args, **kwargs)
 
@@ -61,7 +57,6 @@ class RetrieveUpdateDeleteEvent(mixins.RetrieveModelMixin, mixins.UpdateModelMix
         return self.destroy(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        request.data['author'] = get_object_or_404(
-            ManuscriptUser.objects, user=request.user).id
+        request.data['author'] = request.user.id
         """ .update method available in the mixins.UpdateModelMixin """
         return self.update(request, *args, **kwargs)
