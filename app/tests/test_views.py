@@ -7,6 +7,13 @@ from unittest.mock import patch
 import datetime
 
 
+def assert_auth_return_requred_data(test, content):
+    test.assertEqual(content['id'], User.objects.first().id)
+    test.assertEqual(content['email'], User.objects.first().email)
+    test.assertEqual(content['username'], User.objects.first().username)
+    test.assertIn('token', content)
+
+
 class CreateListEvents(TestCase):
     def setUp(self) -> None:
         user = User.objects.create(
@@ -166,3 +173,75 @@ class RetrieveUpdateDeleteEventTest(TestCase):
         response = self.client.delete(f'/events/{Event.objects.first().id}/')
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Event.objects.count(), 4)
+
+
+class RegisterUserView(TestCase):
+    def setUp(self) -> None:
+        self.client = APIClient()
+
+    def test_register_user_view_should_create_new_user(self):
+        response = self.client.post('/register/', {
+            "email": "test@gmail.com",
+            "password": "test_password",
+            "username": "test_user"
+        })
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(User.objects.count(), 1)
+
+    def test_register_user_view_should_return_required_data(self):
+        response = self.client.post('/register/', {
+            "email": "test@gmail.com",
+            "password": "test_password",
+            "username": "test_user"
+        })
+        content = json.loads(response.content)
+        assert_auth_return_requred_data(self, content)
+
+    def test_register_user_view_should_return_400_when_email_is_invalid(self):
+        response = self.client.post('/register/', {
+            "password": "test_password",
+            "username": "test_user"
+        })
+        content = json.loads(response.content)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(User.objects.count(), 0)
+        self.assertEqual(content['email'][0], 'This field is required.')
+
+    def test_register_user_view_should_return_400_when_username_is_invalid(self):
+        response = self.client.post('/register/', {
+            "email": "test@gmail.com",
+            "password": "test_password",
+        })
+        content = json.loads(response.content)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(User.objects.count(), 0)
+        self.assertEqual(content['username'][0], 'This field is required.')
+
+    def test_register_user_view_should_return_400_when_password_is_invalid(self):
+        response = self.client.post('/register/', {
+            "email": "test@gmail.com",
+            "username": "test_user"
+        })
+        content = json.loads(response.content)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(User.objects.count(), 0)
+        self.assertEqual(content['password'][0], 'This field is required.')
+
+
+class LoginUserView(TestCase):
+    def setUp(self) -> None:
+        self.client = APIClient()
+        User.objects.create_user(
+            username='test_user',
+            email="test@gmail.com",
+            password="test_password",
+        )
+
+    def test_login_user_view_should_return_required_data(self):
+        response = self.client.post('/login/', {
+            "email": "test@gmail.com",
+            "password": "test_password",
+        })
+        self.assertEqual(response.status_code, 200)
+        content = json.loads(response.content)
+        assert_auth_return_requred_data(self, content)
