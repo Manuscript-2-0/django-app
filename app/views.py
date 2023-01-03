@@ -1,15 +1,16 @@
 from rest_framework import mixins
 from rest_framework.generics import GenericAPIView
-from app.serializers import EventSerializer
-from app.models import Event, User
-from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import TokenAuthentication
+import app.serializers as serializers
+from app.models import Event
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.response import Response
+from rest_framework import status
 
 
 class CreateListEvents(mixins.ListModelMixin, mixins.CreateModelMixin, GenericAPIView):
     """ View class for Create a new event and list all the events """
-    serializer_class = EventSerializer
+    serializer_class = serializers.EventSerializer
     queryset = Event.objects.all()
 
     def get_permissions(self):
@@ -33,7 +34,7 @@ class RetrieveUpdateDeleteEvent(mixins.RetrieveModelMixin, mixins.UpdateModelMix
                                 mixins.DestroyModelMixin,
                                 GenericAPIView):
     """ View class for Retrieve, Update and Delete a event """
-    serializer_class = EventSerializer
+    serializer_class = serializers.EventSerializer
     queryset = Event.objects.all()
 
     def get_permissions(self):
@@ -60,3 +61,22 @@ class RetrieveUpdateDeleteEvent(mixins.RetrieveModelMixin, mixins.UpdateModelMix
         request.data['author'] = request.user.id
         """ .update method available in the mixins.UpdateModelMixin """
         return self.update(request, *args, **kwargs)
+
+
+class LoginUserView(GenericAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = serializers.LoginUserSerializer
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        serializer = self.serializer_class(data=data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class RegisterUserView(mixins.CreateModelMixin, GenericAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = serializers.RegistrationSerializer
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)

@@ -1,19 +1,20 @@
-from app.views import CreateListEvents, RetrieveUpdateDeleteEvent
+import app.views as views
 from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
     TokenRefreshView,
+
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('login/', views.LoginUserView.as_view(), name='token_obtain_pair'),
+    path('register/', views.RegisterUserView.as_view(), name='register_user'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('events/', CreateListEvents.as_view(), name='create_list_events'),
-    path('events/<int:pk>/', RetrieveUpdateDeleteEvent.as_view(),
+    path('events/', views.CreateListEvents.as_view(), name='create_list_events'),
+    path('events/<int:pk>/', views.RetrieveUpdateDeleteEvent.as_view(),
          name='retrieve_update_delete_event')
 ]
 
