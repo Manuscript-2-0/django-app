@@ -140,4 +140,18 @@ class Event(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return f'{self.name} ({self.type}): {self.start_date} - {self.end_date}'
+        return f'{self.name} ({self.type.name}): {self.start_date} - {self.end_date}'
+
+
+class Ticket(models.Model):
+    TICKET_STATUSES = ['activated', 'pending', 'canceled']
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, blank=False, null=False)
+    event = models.ForeignKey(
+        Event, on_delete=models.CASCADE, blank=False, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=[(
+        status, status) for status in TICKET_STATUSES], default='pending')
+
+    def __str__(self) -> str:
+        return f'{self.user.username} - {self.event}'

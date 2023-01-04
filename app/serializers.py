@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from app.models import Event, User
+from app.models import Event, User, Ticket
 from django.contrib.auth import authenticate
 
 
@@ -10,6 +10,19 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         fields = '__all__'
         read_only_fields = ('created_at',)
+
+
+class TicketSerializer(serializers.ModelSerializer):
+    event = serializers.PrimaryKeyRelatedField(
+        queryset=Event.objects.all(), write_only=True
+    )
+    event_details = EventSerializer(read_only=True, source='event')
+
+    class Meta:
+        model = Ticket
+        fields = ['id', 'event', 'event_details',
+                  'user', 'created_at', 'status']
+        read_only_fields = ('created_at', )
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
