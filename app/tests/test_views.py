@@ -245,3 +245,19 @@ class LoginUserView(TestCase):
         self.assertEqual(response.status_code, 200)
         content = json.loads(response.content)
         assert_auth_return_requred_data(self, content)
+
+    def test_login_user_view_should_return_400_when_email_is_invalid(self):
+        response = self.client.post('/login/', {
+            "password": "test_password",
+        })
+        content = json.loads(response.content)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(content['email'][0], 'This field is required.')
+
+    def test_login_user_view_should_return_400_when_password_is_invalid(self):
+        response = self.client.post('/login/', {
+            "email": "test@gmail.com",
+        })
+        content = json.loads(response.content)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(content['password'][0], 'This field is required.')
