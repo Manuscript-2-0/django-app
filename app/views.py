@@ -1,7 +1,7 @@
 from rest_framework import mixins
 from rest_framework.generics import GenericAPIView
 import app.serializers as serializers
-from app.models import Event
+import app.models as models
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.response import Response
@@ -11,7 +11,7 @@ from rest_framework import status
 class CreateListEvents(mixins.ListModelMixin, mixins.CreateModelMixin, GenericAPIView):
     """ View class for Create a new event and list all the events """
     serializer_class = serializers.EventSerializer
-    queryset = Event.objects.all()
+    queryset = models.Event.objects.all()
 
     def get_permissions(self):
         method = self.request.method
@@ -30,12 +30,22 @@ class CreateListEvents(mixins.ListModelMixin, mixins.CreateModelMixin, GenericAP
         return self.create(request, *args, **kwargs)
 
 
-class RetrieveUpdateDeleteEvent(mixins.RetrieveModelMixin, mixins.UpdateModelMixin,
-                                mixins.DestroyModelMixin,
-                                GenericAPIView):
+class RetrieveEvent(mixins.RetrieveModelMixin,  GenericAPIView):
+    serializer_class = serializers.EventSerializer
+    queryset = models.Event.objects.all()
+    lookup_field = 'id'
+
+    def get(self, request, *args, **kwargs):
+        """ .retrieve method available in the mixins.RetrieveModelMixin """
+        return self.retrieve(request, *args, **kwargs)
+
+
+class RetrieveEvent(mixins.RetrieveModelMixin, mixins.UpdateModelMixin,
+                    mixins.DestroyModelMixin,
+                    GenericAPIView):
     """ View class for Retrieve, Update and Delete a event """
     serializer_class = serializers.EventSerializer
-    queryset = Event.objects.all()
+    queryset = models.Event.objects.all()
 
     def get_permissions(self):
         method = self.request.method
@@ -79,4 +89,20 @@ class RegisterUserView(mixins.CreateModelMixin, GenericAPIView):
     serializer_class = serializers.RegistrationSerializer
 
     def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class CreateTeamForEventView(mixins.CreateModelMixin, GenericAPIView):
+    """ View class for Create a new team for an event """
+    serializer_class = serializers.TeamSerializer
+    queryset = models.Team.objects.all()
+    lookup_field = 'id'
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        """ Create a new team for an event, here we are using the .create method available in the mixins.CreateModelMixin """
+        if "name" not in request.data or request.data['name'] == '':
+            return Response({'error': 'Team name is required'}, status=status.HTTP_400_BAD_REQUEST)
+        request.data['users'] = [request.user.id]
+        request.data['event'] = kwargs['id']
         return self.create(request, *args, **kwargs)

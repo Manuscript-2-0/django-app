@@ -52,12 +52,12 @@ class CreateListTickets(TestCase):
         self.assertEqual(len(content), 5)
         self.assertEqual(response.status_code, 200)
 
-    def test_create_ticket_should_return_404_when_user_is_not_authenticated(self):
+    def test_create_ticket_should_return_403_when_user_is_not_authenticated(self):
         response = APIClient().post('/tickets/', {
             'event': self.event.id,
         }, format='json')
         content = json.loads(response.content)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(
             content['detail'], 'Authentication credentials were not provided.')
 
@@ -115,12 +115,12 @@ class RetrieveUpdateDeleteEventTest(TestCase):
         self.assertEqual(content['user'], self.user.id)
         self.assertEqual(content['status'], 'pending')
 
-    def test_patch_ticket_should_return_401_when_user_is_not_authenticated(self):
+    def test_patch_ticket_should_return_403_when_user_is_not_authenticated(self):
         response = APIClient().patch(f'/tickets/{self.ticket.id}/', {
             "status": "activated",
         })
         content = json.loads(response.content)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(
             content['detail'], 'Authentication credentials were not provided.')
         self.assertEqual(Ticket.objects.first().status, 'pending')
@@ -133,10 +133,10 @@ class RetrieveUpdateDeleteEventTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Ticket.objects.first().status, 'activated')
 
-    def test_delete_ticket_should_return_401_when_user_is_not_authenticated(self):
+    def test_delete_ticket_should_return_403_when_user_is_not_authenticated(self):
         response = APIClient().delete(f'/tickets/{self.ticket.id}/')
         content = json.loads(response.content)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(
             content['detail'], 'Authentication credentials were not provided.')
         self.assertEqual(Ticket.objects.count(), 1)

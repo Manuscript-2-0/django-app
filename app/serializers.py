@@ -1,25 +1,39 @@
 from rest_framework import serializers
-from app.models import Event, User, Ticket
+import app.models as models
 from django.contrib.auth import authenticate
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.User
+        fields = ('id', 'username', 'email')
+
+
+class TeamSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Team
+        fields = '__all__'
+        read_only_fields = ('created_at',)
 
 
 class EventSerializer(serializers.ModelSerializer):
     type = serializers.SlugRelatedField
 
     class Meta:
-        model = Event
+        model = models.Event
         fields = '__all__'
         read_only_fields = ('created_at',)
 
 
 class TicketSerializer(serializers.ModelSerializer):
     event = serializers.PrimaryKeyRelatedField(
-        queryset=Event.objects.all(), write_only=True
+        queryset=models.Event.objects.all(), write_only=True
     )
     event_details = EventSerializer(read_only=True, source='event')
 
     class Meta:
-        model = Ticket
+        model = models.Ticket
         fields = ['id', 'event', 'event_details',
                   'user', 'created_at', 'status']
         read_only_fields = ('created_at', )
@@ -41,7 +55,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     token = serializers.CharField(max_length=255, read_only=True)
 
     class Meta:
-        model = User
+        model = models.User
         # Перечислить все поля, которые могут быть включены в запрос
         # или ответ, включая поля, явно указанные выше.
         fields = ['id', 'email', 'username', 'password', 'token']
@@ -49,7 +63,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # Использовать метод create_user, который мы
         # написали ранее, для создания нового пользователя.
-        return User.objects.create_user(**validated_data)
+        return models.User.objects.create_user(**validated_data)
 
 
 class LoginUserSerializer(serializers.ModelSerializer):
@@ -59,7 +73,7 @@ class LoginUserSerializer(serializers.ModelSerializer):
     token = serializers.CharField(allow_blank=True, read_only=True)
 
     class Meta:
-        model = User
+        model = models.User
         fields = ('id', 'username', 'email', 'password', 'token')
 
     def validate(self, data):

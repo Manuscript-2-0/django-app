@@ -47,7 +47,7 @@ class CreateListEvents(TestCase):
         content = json.loads(response.content)
         self.assertEqual(len(content), 5)
 
-    def test_create_event_should_return_404_when_user_is_not_authenticated(self):
+    def test_create_event_should_return_403_when_user_is_not_authenticated(self):
         # Act
         response = APIClient().post('/events/', {
             'name': 'test_event',
@@ -57,7 +57,7 @@ class CreateListEvents(TestCase):
         }, format='json')
         # Assert
         content = json.loads(response.content)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(
             content['detail'], 'Authentication credentials were not provided.')
 
@@ -114,12 +114,12 @@ class RetrieveUpdateDeleteEventTest(TestCase):
         self.assertEqual(content['start_date'], '2020-01-01')
         self.assertEqual(content['end_date'], '2020-01-01')
 
-    def test_patch_event_should_return_401_when_user_is_not_authenticated(self):
+    def test_patch_event_should_return_403_when_user_is_not_authenticated(self):
         response = APIClient().patch(f'/events/{Event.objects.first().id}/', {
             "name": "test_event updated",
         })
         content = json.loads(response.content)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(
             content['detail'], 'Authentication credentials were not provided.')
         self.assertEqual(Event.objects.first().name, 'test_event_0')
@@ -134,12 +134,12 @@ class RetrieveUpdateDeleteEventTest(TestCase):
         self.assertEqual(Event.objects.first().name, 'test_event updated')
         self.assertEqual(Event.objects.count(), 5)
 
-    def test_put_event_should_return_401_when_user_is_not_authenticated(self):
+    def test_put_event_should_return_403_when_user_is_not_authenticated(self):
         response = APIClient().put(f'/events/{Event.objects.first().id}/', {
             "name": "test_event updated",
         })
         content = json.loads(response.content)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(
             content['detail'], 'Authentication credentials were not provided.')
         self.assertEqual(Event.objects.first().name, 'test_event_0')
@@ -161,10 +161,10 @@ class RetrieveUpdateDeleteEventTest(TestCase):
                          datetime.date(2020, 6, 1))
         self.assertEqual(Event.objects.count(), 5)
 
-    def test_delete_event_should_return_401_when_user_is_not_authenticated(self):
+    def test_delete_event_should_return_403_when_user_is_not_authenticated(self):
         response = APIClient().delete(f'/events/{Event.objects.first().id}/')
         content = json.loads(response.content)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(
             content['detail'], 'Authentication credentials were not provided.')
         self.assertEqual(Event.objects.first().name, 'test_event_0')

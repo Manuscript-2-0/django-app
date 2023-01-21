@@ -155,3 +155,13 @@ class Ticket(models.Model):
 
     def __str__(self) -> str:
         return f'{self.user.username} - {self.event}'
+
+
+class Team(models.Model):
+    name = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    users = models.ManyToManyField(User, related_name='teams')
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.name
