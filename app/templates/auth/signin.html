@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        {% include "core/head_part.html" %}
+      
+      </head>
+
+<body>
+
+<!-- **************** MAIN CONTENT START **************** -->
+<main class="row m-0 p-0" style='min-height: 100vh'>	
+		<!-- left -->
+		{% include "auth/left_content.html" %}
+		<!-- Right -->
+		<div class="col-6 m-auto">
+			<h1 class="fs-2">Авторизация аккаунта</h1>
+			<p class="lead mb-4">Рады вас видеть! Пожалуйста, пройдите процесс авторизации.</p>
+			<!-- Form START -->
+			<form class="user" method="post" action="/signin">
+				{% csrf_token %}
+				<!-- Email -->
+				<div class="mb-4">
+					<label class="form-label">E-mail адрес</label>
+					<div class="input-group input-group">
+						<span class="input-group-text bg-light rounded-start border-0 text-secondary px-3"><i class="bi bi-envelope-fill"></i></span>
+						<input name='email' type="text" id="login_email_validate" class="form-control border-0 bg-light rounded-end ps-1" placeholder="E-mail">
+					</div>
+				</div>
+				<!-- Password -->
+				<div class="mb-4">
+					<label class="form-label">Пароль</label>
+					<div class="input-group input-group">
+						<span class="input-group-text bg-light rounded-start border-0 text-secondary px-3"><i class="bi bi-lock-fill"></i></span>
+						<input name='password' type="password" id="login_password_validate" class="form-control border-0 bg-light rounded-end ps-1" placeholder="Пароль">
+					</div>
+				</div>
+				<!-- Check box -->
+				<div class="mb-4 d-flex justify-content-between mb-4">
+					<div class="form-check">
+						<input type="checkbox" class="form-check-input" id="customCheck">
+						<label class="form-check-label" for="customCheck">Запомнить меня</label>
+					</div>
+				</div>
+				<!-- Button -->
+				<div class="align-items-center mt-0">
+					<div class="d-grid">
+						<button class="btn btn-primary mb-0" id="LogIn" type="submit">Вперед</button>
+					</div>
+				</div>
+			</form>
+			<!-- Form END -->
+
+			<!-- Sign up link -->
+			<div class="mt-4 text-center">
+				<span>Еще нет аккаунта? <a href="/signup">Зарегистрируйтесь</a> здесь</span>
+			</div>
+		</div>
+</main>
+<!-- **************** MAIN CONTENT END **************** -->
+</body>
+</html>
