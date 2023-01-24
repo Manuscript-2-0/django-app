@@ -14,14 +14,14 @@ class CreateTeam(TestCase):
         self.client.force_authenticate(user=self.user)
 
     def test_create_team_should_raise_exception_when_user_is_not_authenticated(self):
-        response = APIClient().post('/events/999/create_team', {
+        response = APIClient().post('/api/events/999/create_team', {
             'name': 'test_team',
         }, format='json')
 
         self.assertEqual(response.status_code, 403)
 
     def test_create_team_should_raise_exception_when_event_does_not_exist(self):
-        response = self.client.post('/events/999/create_team', {
+        response = self.client.post('/api/events/999/create_team', {
             'name': 'test_team',
         }, format='json')
         content = json.loads(response.content)
@@ -37,7 +37,7 @@ class CreateTeam(TestCase):
             end_date='2020-01-01',
             author=self.user
         )
-        response = self.client.post(f'/events/{event.id}/create_team', {
+        response = self.client.post(f'/api/events/{event.id}/create_team', {
             'name': '',
         }, format='json')
         content = json.loads(response.content)
@@ -52,7 +52,7 @@ class CreateTeam(TestCase):
             end_date='2020-01-01',
             author=self.user
         )
-        response = self.client.post(f'/events/{event.id}/create_team', {
+        response = self.client.post(f'/api/events/{event.id}/create_team', {
             'name': 'test_team',
         }, format='json')
         content = json.loads(response.content)

@@ -33,7 +33,7 @@ class CreateListEvents(TestCase):
     # @patch('app.views.CreateListEvents.get')
     def test_list_events_should_return_list_of_events_on_unauthenticated_request(self):
         # Act
-        response = APIClient().get('/events/')
+        response = APIClient().get('/api/events')
         # Assert
         self.assertEqual(response.status_code, 200)
         content = json.loads(response.content)
@@ -41,7 +41,7 @@ class CreateListEvents(TestCase):
 
     def test_list_events_should_return_list_of_events_on_authenticated_request(self):
         # Act
-        response = self.client.get('/events/')
+        response = self.client.get('/api/events')
         # Assert
         self.assertEqual(response.status_code, 200)
         content = json.loads(response.content)
@@ -49,7 +49,7 @@ class CreateListEvents(TestCase):
 
     def test_create_event_should_return_403_when_user_is_not_authenticated(self):
         # Act
-        response = APIClient().post('/events/', {
+        response = APIClient().post('/api/events', {
             'name': 'test_event',
             'type': EventType.objects.first().id,
             'start_date': '2020-01-01',
@@ -63,7 +63,7 @@ class CreateListEvents(TestCase):
 
     def test_create_event_should_create_event_on_authenticated_request(self):
         # Act
-        response = self.client.post('/events/', {
+        response = self.client.post('/api/events', {
             'name': 'test_event',
             'type': EventType.objects.first().id,
             'start_date': '2020-01-01',
@@ -97,7 +97,7 @@ class RetrieveUpdateDeleteEventTest(TestCase):
             )
 
     def test_get_event_should_return_event_when_user_is_not_authenticated(self):
-        response = APIClient().get(f'/events/{Event.objects.first().id}/')
+        response = APIClient().get(f'/api/events/{Event.objects.first().id}')
         self.assertEqual(response.status_code, 200)
         content = json.loads(response.content)
         self.assertEqual(content['name'], 'test_event_0')
@@ -106,7 +106,7 @@ class RetrieveUpdateDeleteEventTest(TestCase):
         self.assertEqual(content['end_date'], '2020-01-01')
 
     def test_get_event_should_return_event_when_user_is_authenticated(self):
-        response = APIClient().get(f'/events/{Event.objects.first().id}/')
+        response = APIClient().get(f'/api/events/{Event.objects.first().id}')
         self.assertEqual(response.status_code, 200)
         content = json.loads(response.content)
         self.assertEqual(content['name'], 'test_event_0')
@@ -115,7 +115,7 @@ class RetrieveUpdateDeleteEventTest(TestCase):
         self.assertEqual(content['end_date'], '2020-01-01')
 
     def test_patch_event_should_return_403_when_user_is_not_authenticated(self):
-        response = APIClient().patch(f'/events/{Event.objects.first().id}/', {
+        response = APIClient().patch(f'/api/events/{Event.objects.first().id}', {
             "name": "test_event updated",
         })
         content = json.loads(response.content)
@@ -125,7 +125,7 @@ class RetrieveUpdateDeleteEventTest(TestCase):
         self.assertEqual(Event.objects.first().name, 'test_event_0')
 
     def test_patch_event_should_update_event_when_user_is_authenticated(self):
-        response = self.client.patch(f'/events/{Event.objects.first().id}/', {
+        response = self.client.patch(f'/api/events/{Event.objects.first().id}', {
             "name": "test_event updated",
         }, format='json')
         content = json.loads(response.content)
@@ -135,7 +135,7 @@ class RetrieveUpdateDeleteEventTest(TestCase):
         self.assertEqual(Event.objects.count(), 5)
 
     def test_put_event_should_return_403_when_user_is_not_authenticated(self):
-        response = APIClient().put(f'/events/{Event.objects.first().id}/', {
+        response = APIClient().put(f'/api/events/{Event.objects.first().id}', {
             "name": "test_event updated",
         })
         content = json.loads(response.content)
@@ -145,7 +145,7 @@ class RetrieveUpdateDeleteEventTest(TestCase):
         self.assertEqual(Event.objects.first().name, 'test_event_0')
 
     def test_put_event_should_update_event_when_user_is_authenticated(self):
-        response = self.client.put(f'/events/{Event.objects.first().id}/', {
+        response = self.client.put(f'/api/events/{Event.objects.first().id}', {
             "name": "test_event updated",
             "type": EventType.objects.first().id,
             "start_date": "2020-06-01",
@@ -162,7 +162,8 @@ class RetrieveUpdateDeleteEventTest(TestCase):
         self.assertEqual(Event.objects.count(), 5)
 
     def test_delete_event_should_return_403_when_user_is_not_authenticated(self):
-        response = APIClient().delete(f'/events/{Event.objects.first().id}/')
+        response = APIClient().delete(
+            f'/api/events/{Event.objects.first().id}')
         content = json.loads(response.content)
         self.assertEqual(response.status_code, 403)
         self.assertEqual(
@@ -170,7 +171,8 @@ class RetrieveUpdateDeleteEventTest(TestCase):
         self.assertEqual(Event.objects.first().name, 'test_event_0')
 
     def test_delete_event_should_delete_event_when_user_is_authenticated(self):
-        response = self.client.delete(f'/events/{Event.objects.first().id}/')
+        response = self.client.delete(
+            f'/api/events/{Event.objects.first().id}')
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Event.objects.count(), 4)
 
@@ -180,7 +182,7 @@ class RegisterUserView(TestCase):
         self.client = APIClient()
 
     def test_register_user_view_should_create_new_user(self):
-        response = self.client.post('/register/', {
+        response = self.client.post('/api/register', {
             "email": "test@gmail.com",
             "password": "test_password",
             "username": "test_user"
@@ -189,7 +191,7 @@ class RegisterUserView(TestCase):
         self.assertEqual(User.objects.count(), 1)
 
     def test_register_user_view_should_return_required_data(self):
-        response = self.client.post('/register/', {
+        response = self.client.post('/api/register', {
             "email": "test@gmail.com",
             "password": "test_password",
             "username": "test_user"
@@ -198,7 +200,7 @@ class RegisterUserView(TestCase):
         assert_auth_return_requred_data(self, content)
 
     def test_register_user_view_should_return_400_when_email_is_invalid(self):
-        response = self.client.post('/register/', {
+        response = self.client.post('/api/register', {
             "password": "test_password",
             "username": "test_user"
         })
@@ -208,7 +210,7 @@ class RegisterUserView(TestCase):
         self.assertEqual(content['email'][0], 'This field is required.')
 
     def test_register_user_view_should_return_400_when_username_is_invalid(self):
-        response = self.client.post('/register/', {
+        response = self.client.post('/api/register', {
             "email": "test@gmail.com",
             "password": "test_password",
         })
@@ -218,7 +220,7 @@ class RegisterUserView(TestCase):
         self.assertEqual(content['username'][0], 'This field is required.')
 
     def test_register_user_view_should_return_400_when_password_is_invalid(self):
-        response = self.client.post('/register/', {
+        response = self.client.post('/api/register', {
             "email": "test@gmail.com",
             "username": "test_user"
         })
@@ -238,7 +240,7 @@ class LoginUserView(TestCase):
         )
 
     def test_login_user_view_should_return_required_data(self):
-        response = self.client.post('/login/', {
+        response = self.client.post('/api/login', {
             "email": "test@gmail.com",
             "password": "test_password",
         })
@@ -247,7 +249,7 @@ class LoginUserView(TestCase):
         assert_auth_return_requred_data(self, content)
 
     def test_login_user_view_should_return_400_when_email_is_invalid(self):
-        response = self.client.post('/login/', {
+        response = self.client.post('/api/login', {
             "password": "test_password",
         })
         content = json.loads(response.content)
@@ -255,7 +257,7 @@ class LoginUserView(TestCase):
         self.assertEqual(content['email'][0], 'This field is required.')
 
     def test_login_user_view_should_return_400_when_password_is_invalid(self):
-        response = self.client.post('/login/', {
+        response = self.client.post('/api/login', {
             "email": "test@gmail.com",
         })
         content = json.loads(response.content)
