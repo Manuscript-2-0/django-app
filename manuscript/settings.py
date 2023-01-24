@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'app',
+    'api',
     'corsheaders'
 ]
 
@@ -49,7 +50,7 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'app.authentication.backend.JWTAuthentication',
+        'api.authentication.backend.JWTAuthentication',
     ),
 }
 
@@ -127,7 +128,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'app.User'
+AUTH_USER_MODEL = 'api.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

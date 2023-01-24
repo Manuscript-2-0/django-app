@@ -1,5 +1,5 @@
-import app.views as views
-import app.views_ticket as views_ticket
+import api.views as views
+import api.views_ticket as views_ticket
 from django.contrib import admin
 from django.urls import path
 from django.conf import settings
