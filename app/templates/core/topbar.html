@@ -8,10 +8,10 @@
 				 Manuscript 2.0
 			</a>
 			<!-- Logo END -->
-			{% if is_anonymous %}
+			{% if user.is_anonymous %}
 			<div>
-				<a href="\login.html"><button class="btn btn-sm btn-outline-dark">Войти</button></a>
-				<a href="\signup.html"><button class="btn btn-sm btn-outline-dark">Регистрация</button></a>
+				<a href="\signin"><button class="btn btn-sm btn-outline-dark">Войти</button></a>
+				<a href="\signup"><button class="btn btn-sm btn-outline-dark">Регистрация</button></a>
 			</div>
             {% else %}
             <img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" class="rounded-circle" height='48' width='48'>
