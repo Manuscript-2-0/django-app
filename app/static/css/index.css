@@ -1,0 +1,13 @@
+html {
+  font-size: 0.8rem;
+}
+
+a {
+  text-decoration: none !important;
+  color: #000;
+}
+
+a:hover {
+  text-decoration: none !important;
+  color: #000;
+}

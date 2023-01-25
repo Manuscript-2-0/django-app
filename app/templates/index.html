@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  {% include "core/head_part.html" %}
+
+</head>
+
+<body id="page-top">
+    {% include "core/topbar.html"%}
+
+    <main style='min-height: 95vh'>
+        <section class="pt-0 pt-md-5">
+            <div class="container">
+                <!-- Title -->
+                <div class="row">
+                    <div class="col-lg-8 mb-4">
+                        <h2 class="mb-0">Открыты для<span class='text-success'> Регистрации</span></h2>
+                        <p class="mb-0">Не пропустите наши самые 🔥 мероприятия!</p>
+                    </div>
+                </div>
+        
+                <div class="row g-4">
+                    {% for event in open_events %}
+                        {% include 'components/event_card.html' with event=event %}
+                    {% endfor %}
+                </div>
+                <!-- Button -->
+                <div class="text-center mt-5">
+                    <a href="#" class="btn btn-primary-soft mb-0">View more<i class="fas fa-sync ms-2"></i></a>
+                </div>
+            </div>
+        </section>
+    </main>
+    {% comment %} {% include 'components/footer.html' %} {% endcomment %}
+
+</body>
+
+</html>

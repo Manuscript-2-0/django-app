@@ -3,7 +3,17 @@ import json
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+import api.models as models
+from datetime import datetime
 # Create your views here.
+
+
+def index(request):
+    open_events = models.Event.objects.filter(start_date__gte=datetime.now())
+    context = {
+        "open_events": open_events
+    }
+    return render(request, 'index.html', context=context)
 
 
 def signin(request):

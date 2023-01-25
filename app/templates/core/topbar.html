@@ -1,0 +1,23 @@
+<header class="bg-light navbar-sticky">
+	<!-- Logo Nav START -->
+	<nav class="navbar navbar-expand-xl">
+		<div class="container">
+
+			<!-- Logo START -->
+			<a class="navbar-brand" style="padding-top:15px; padding-bottom:15px" href="/">
+				 Manuscript 2.0
+			</a>
+			<!-- Logo END -->
+			{% if is_anonymous %}
+			<div>
+				<a href="\login.html"><button class="btn btn-sm btn-outline-dark">Войти</button></a>
+				<a href="\signup.html"><button class="btn btn-sm btn-outline-dark">Регистрация</button></a>
+			</div>
+            {% else %}
+            <img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" class="rounded-circle" height='48' width='48'>
+			{% endif %}
+		</div>
+	</nav>
+	<!-- Logo Nav END -->
+</header>
+<!-- End of Topbar -->

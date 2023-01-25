@@ -1,0 +1,25 @@
+<!-- Card item START -->
+<a href='/events/{{event.id}}' class="col-sm-6 col-xl-4">
+    <div class="card shadow-hover overflow-hidden h-100">
+        <!-- Image -->
+        <img src="{{event.image}}" class="card-img-top" alt="course image">
+        <!-- Card body -->
+        <div class="card-body pb-0">
+            <!-- Badge and favorite -->
+            <div class="d-flex justify-content-between mb-2">
+                <span class="badge bg-info bg-opacity-25 text-info">{{event.type.name}}</span>
+            </div>
+            <!-- Title -->
+            <h5 class="card-title">{{event.name}}</h5>
+            <p class="mb-2 text-truncate-2">{{event.description}}</p>
+        </div>
+        <!-- Card footer -->
+        <div class="card-footer pt-3 pb-3">
+
+            <div class="d-flex justify-content-between">
+                <span class="h6 fw-light mb-0"><i class="bi bi-clock text-danger me-2"></i>{{event.start_date}}</span>
+            </div>
+        </div>
+    </div>
+</a>
+<!-- Card item END -->

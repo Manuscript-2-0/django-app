@@ -133,6 +133,9 @@ class EventType(models.Model):
 
 class Event(models.Model):
     name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+    image = models.CharField(
+        max_length=1000, default="/static/img/default_event.png")
     type = models.ForeignKey('EventType', on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()

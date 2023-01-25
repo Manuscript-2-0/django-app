@@ -14,54 +14,51 @@
     {% include "auth/left_content.html" %}
 
     <!-- Right -->
-    <div class="col-6 m-auto">
-        <div class="row my-5">
-            <div class="col-sm-10 col-xl-8 m-auto">
-                <h2 id="registration_topic">Регистрация аккаунта</h2>
-                <p class="lead mb-4" id="registration_topic_detail">Рады вас видеть! Пожалуйста, пройдите процесс регистрации</p>
-            
-                <!-- Form START -->
-                <form class="user" method="post" action="/signup" id="main_reg_form">
-                    {% csrf_token %}
-                    <!-- Name -->
-                    <div class="mb-4">
-                        <label class="form-label">Имя и фамилия</label>
-                        <div id="NameInput" class="input-group input-group">
-                            <span class="input-group-text bg-light rounded-start border-0 text-secondary px-3"><i class="bi bi-pen-fill"></i></span>
-                            <input required type="text" name="last_name" id="last_name_validate" class="form-control border-0 bg-light rounded-end ps-1" placeholder="Фамилия">
-                            <input required type="text" name="first_name" id="first_name_validate" class="form-control border-0 bg-light rounded-end ps-1" placeholder="Имя">
-                        </div>
-                    </div>
-                    <!-- Email -->
-                    <div class="mb-4">
-                        <label class="form-label">E-mail адрес</label>
-                        <div class="input-group input-group">
-                            <span class="input-group-text bg-light rounded-start border-0 text-secondary px-3"><i class="bi bi-envelope-fill"></i></span>
-                            <input type="email" name="email" id="email_validate" class="form-control border-0 bg-light rounded-end ps-1" placeholder="E-mail">
-                        </div>
-                    </div>
-                    <!-- Password -->
-                    <div class="mb-4">
-                        <label class="form-label">Пароль</label>
-                        <div class="input-group input-group has-validation">
-                            <span class="input-group-text bg-light rounded-start border-0 text-secondary px-3"><i class="bi bi-lock-fill"></i></span>
-                            <input type="password" name="password" id="password_validate" class="form-control border-0 bg-light rounded-end ps-1" placeholder="Придумайте">
-                            <input type="password" name="password_confirm" id="password_confirm" class="form-control border-0 bg-light rounded-end ps-1" placeholder="Подтвердите">
-                        </div>
-                    </div>
-                    <div class="align-items-center mt-0">
-                        <div class="d-grid">
-                            <button class="btn btn-primary mb-0" id="SignUp" type="submit">Вперед</button>
-                        </div>
-                    </div>
-                </form>
-                <!-- Form END -->
-                <!-- Login link -->
-                <div class="mt-4 text-center" id="login_link">
-                    <span>Уже есть аккаунт? <a href="/signin">Войдите</a> здесь.</span>
+    <div class="col-6 m-auto">    
+        <h2 id="registration_topic">Регистрация аккаунта</h2>
+        <p class="lead mb-4" id="registration_topic_detail">Рады вас видеть! Пожалуйста, пройдите процесс регистрации</p>
+    
+        <!-- Form START -->
+        <form class="user" method="post" action="/signup" id="main_reg_form">
+            {% csrf_token %}
+            <!-- Name -->
+            <div class="mb-4">
+                <label class="form-label">Имя и фамилия</label>
+                <div id="NameInput" class="input-group input-group">
+                    <span class="input-group-text bg-light rounded-start border-0 text-secondary px-3"><i class="bi bi-pen-fill"></i></span>
+                    <input required type="text" name="last_name" id="last_name_validate" class="form-control border-0 bg-light rounded-end ps-1" placeholder="Фамилия">
+                    <input required type="text" name="first_name" id="first_name_validate" class="form-control border-0 bg-light rounded-end ps-1" placeholder="Имя">
                 </div>
             </div>
+            <!-- Email -->
+            <div class="mb-4">
+                <label class="form-label">E-mail адрес</label>
+                <div class="input-group input-group">
+                    <span class="input-group-text bg-light rounded-start border-0 text-secondary px-3"><i class="bi bi-envelope-fill"></i></span>
+                    <input type="email" name="email" id="email_validate" class="form-control border-0 bg-light rounded-end ps-1" placeholder="E-mail">
+                </div>
+            </div>
+            <!-- Password -->
+            <div class="mb-4">
+                <label class="form-label">Пароль</label>
+                <div class="input-group input-group has-validation">
+                    <span class="input-group-text bg-light rounded-start border-0 text-secondary px-3"><i class="bi bi-lock-fill"></i></span>
+                    <input type="password" name="password" id="password_validate" class="form-control border-0 bg-light rounded-end ps-1" placeholder="Придумайте">
+                    <input type="password" name="password_confirm" id="password_confirm" class="form-control border-0 bg-light rounded-end ps-1" placeholder="Подтвердите">
+                </div>
+            </div>
+            <div class="align-items-center mt-0">
+                <div class="d-grid">
+                    <button class="btn btn-primary mb-0" id="SignUp" type="submit">Вперед</button>
+                </div>
+            </div>
+        </form>
+        <!-- Form END -->
+        <!-- Login link -->
+        <div class="mt-4 text-center" id="login_link">
+            <span>Уже есть аккаунт? <a href="/signin">Войдите</a> здесь.</span>
         </div>
+            
     </div>
 </main>
 </body>
