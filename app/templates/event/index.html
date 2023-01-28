@@ -27,7 +27,7 @@ Page content START -->
 						<ul class="list-inline mb-0">
 							<li class="list-inline-item fw-light h6 me-3 mb-1 mb-sm-0"><i class="bi bi-clock-fill me-2"></i>Applications Deadline: {{event.end_date}}</li>
 							<li class="list-inline-item fw-light h6 me-3 mb-1 mb-sm-0"><i class="bi bi-people-fill me-2"></i>undefined Teams</li>
-							<li class="list-inline-item fw-light h6 me-3 mb-1 mb-sm-0"><i class="bi bi-geo-alt-fill me-2"></i>Almaty, Kazakhstan</li>
+							<li class="list-inline-item fw-light h6 me-3 mb-1 mb-sm-0"><i class="bi bi-geo-alt-fill me-2"></i>{{event.location}}</li>
 						</ul>
 					</div>
 					<!-- Title END -->
@@ -48,7 +48,7 @@ Page content START -->
 		
 							<!-- Card body START -->
 							<div class="card-body">
-								<p class="mb-3">Full Description {{event.full_description}}</p>
+								<p class="mb-3">{{event.full_description|safe}}</p>
 							</div>
 							<!-- Card body START -->
 						</div>
@@ -69,114 +69,22 @@ Page content START -->
 								<div class="row g-5">
 									<!-- Lecture item START -->
 									<div class="col-12">
-										<!-- Curriculum item -->
-										<h5 class="mb-4">Introduction of Digital Marketing (3 lectures)</h5>
-										<div class="d-sm-flex justify-content-sm-between align-items-center">
+										{% for item in event.agenda %}
+											<div class="d-sm-flex justify-content-sm-between align-items-center">
 											<div class="d-flex">
-												<a href="#" class="btn btn-danger-soft btn-round mb-0"><i class="fas fa-play"></i></a>
+												<a href="#" class="btn {% if item.passed %} btn-success-soft {% else %} btn-primary-soft {% endif %} btn-round mb-0"><i class="fas fa-play"></i></a>
 												<div class="ms-2 ms-sm-3 mt-1 mt-sm-0">	
-													<h6 class="mb-0">Introduction</h6>
-													<p class="mb-2 mb-sm-0 small">10m 56s</p>
+													<h6 class="mb-0">{{item.name}}</h6>
+													<p class="mb-2 mb-sm-0 small">{{item.start_date}}</p>
 												</div>
 											</div>
-											<!-- Button -->
-											<a href="#" class="btn btn-sm btn-success mb-0">Play</a>
-										</div>
-										<!-- Divider -->
-										<hr>
-		
-										<!-- Curriculum item -->
-										<div class="d-sm-flex justify-content-sm-between align-items-center">
-											<div class="d-flex">
-												<a href="#" class="btn btn-danger-soft btn-round mb-0 flex-shrink-0"><i class="fas fa-play"></i></a>
-												<div class="ms-2 ms-sm-3 mt-1 mt-sm-0">	
-													<h6 class="mb-0">What is Digital Marketing</h6>
-													<p class="mb-2 mb-sm-0 small">18m 30s</p>
-												</div>
 											</div>
-											<!-- Button -->
-											<a href="#" class="btn btn-sm btn-success mb-0">Play</a>
-										</div>
-										<!-- Divider -->
-										<hr>
-		
-										<!-- Curriculum item -->
-										<div class="d-sm-flex justify-content-sm-between align-items-center">
-											<div class="d-flex">
-												<a href="#" class="btn btn-light btn-round mb-0 flex-shrink-0"><i class="bi bi-lock-fill"></i></a>
-												<div class="ms-2 ms-sm-3 mt-1 mt-sm-0">	
-													<h6 class="mb-0">Type of Digital Marketing</h6>
-													<p class="mb-2 mb-sm-0 small">22m 26s</p>
-												</div>
-											</div>
-											<!-- Button -->
-											<a href="#" class="btn btn-sm btn-orange mb-0">Premium</a>
-										</div>
+											<hr>
+										{% endfor %}
+										
 									</div>
 									<!-- Lecture item END -->
 
-									<!-- Lecture item START -->
-									<div class="col-12">
-										<!-- Curriculum item -->
-										<h5 class="mb-4">Customer Life cycle (4 lectures)</h5>
-										<div class="d-sm-flex justify-content-sm-between align-items-center">
-											<div class="d-flex">
-												<a href="#" class="btn btn-danger-soft btn-round mb-0 flex-shrink-0"><i class="fas fa-play"></i></a>
-												<div class="ms-2 ms-sm-3 mt-1 mt-sm-0">	
-													<h6 class="mb-0">What is Digital Marketing</h6>
-													<p class="mb-2 mb-sm-0 small">10m 56s</p>
-												</div>
-											</div>
-											<!-- Button -->
-											<a href="#" class="btn btn-sm btn-success mb-0">Play</a>
-										</div>
-										<!-- Divider -->
-										<hr>
-		
-										<!-- Curriculum item -->
-										<div class="d-sm-flex justify-content-sm-between align-items-center">
-											<div class="d-flex">
-												<a href="#" class="btn btn-danger-soft btn-round mb-0 flex-shrink-0"><i class="fas fa-play"></i></a>
-												<div class="ms-2 ms-sm-3 mt-1 mt-sm-0">	
-													<h6 class="mb-0">15 Tips for Writing Magnetic Headlines</h6>
-													<p class="mb-2 mb-sm-0 small">18m 30s</p>
-												</div>
-											</div>
-											<!-- Button -->
-											<a href="#" class="btn btn-sm btn-success mb-0">Play</a>
-										</div>
-										<!-- Divider -->
-										<hr>
-		
-										<!-- Curriculum item -->
-										<div class="d-sm-flex justify-content-sm-between align-items-center">
-											<div class="d-flex">
-												<a href="#" class="btn btn-light btn-round mb-0 flex-shrink-0"><i class="bi bi-lock-fill"></i></a>
-												<div class="ms-2 ms-sm-3 mt-1 mt-sm-0">	
-													<h6 class="mb-0">How to Write Like Your Customers Talk</h6>
-													<p class="mb-2 mb-sm-0 small">22m 26s</p>
-												</div>
-											</div>
-											<!-- Button -->
-											<a href="#" class="btn btn-sm btn-orange mb-0">Premium</a>
-										</div>
-										<!-- Divider -->
-										<hr>
-	
-										<!-- Curriculum item -->
-										<div class="d-sm-flex justify-content-sm-between align-items-center">
-											<div class="d-flex">
-												<a href="#" class="btn btn-light btn-round mb-0 flex-shrink-0"><i class="bi bi-lock-fill"></i></a>
-												<div class="ms-2 ms-sm-3 mt-1 mt-sm-0">	
-													<h6 class="mb-0">How to Flip Features Into Benefits</h6>
-													<p class="mb-2 mb-sm-0 small">18m 26s</p>
-												</div>
-											</div>
-											<!-- Button -->
-											<a href="#" class="btn btn-sm btn-orange mb-0">Premium</a>
-										</div>
-									</div>
-									<!-- Lecture item END -->
 								</div>
 							</div>
 							<!-- Card body START -->
@@ -197,7 +105,7 @@ Page content START -->
                                 <div class="d-sm-flex align-items-center">
 									<!-- Avatar image -->
 									<div class="avatar avatar-xl">
-										<img class="avatar-img rounded-circle" src="{{event.author.image}}" alt="avatar">
+										<img class="avatar-img rounded-circle" src="{{event.author.image.url}}" alt="avatar">
 									</div>
 									<div class="ms-sm-3 mt-2 mt-sm-0">
 										<h5 class="mb-0"><a href="#">By {{event.author.get_full_name}}</a></h5>
@@ -219,8 +127,8 @@ Page content START -->
 							<div class="card card-body border p-4">
 								<h4 class="mb-3">Tags</h4>
 								<ul class="list-inline mb-0">
-                                    {% for tag in event.tags %}
-                                        <li class="list-inline-item"> <a class="btn btn-outline-light btn-sm" href="#">{{tag.name}}</a> </li>
+                                    {% for tag in event.tags.all %}
+                                        <li class="list-inline-item"> <a class="btn btn-outline-light btn-sm" href="/events/tags/{{tag.name}}">{{tag.name}}</a> </li>
                                     {% endfor %}
 								</ul>
 							</div>	

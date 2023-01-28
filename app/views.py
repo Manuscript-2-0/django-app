@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 import api.models as models
 from datetime import datetime
+from django.utils import timezone
+
 # Create your views here.
 
 
@@ -12,7 +14,7 @@ def index(request):
     open_events = models.Event.objects.filter(
         start_date__lte=datetime.now(), end_date__gte=datetime.now())
     context = {
-        "open_events": open_events
+        "events": open_events
     }
 
     return render(request, 'index.html', context=context)
@@ -47,7 +49,20 @@ def signup(request):
 
 def event_details(request, event_id):
     event = models.Event.objects.get(id=event_id)
+    event.agenda = models.AgendaItem.objects.filter(
+        event=event).order_by('start_date')
+    for item in event.agenda:
+        item.passed = item.start_date < timezone.now()
     context = {
         "event": event
     }
     return render(request, 'event/index.html', context=context)
+
+
+def events_by_tag(request, tag):
+    events = models.Event.objects.filter(tags__name__in=[tag])
+    context = {
+        "events": events
+    }
+
+    return render(request, 'index.html', context=context)

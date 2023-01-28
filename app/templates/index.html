@@ -22,7 +22,7 @@
                 </div>
         
                 <div class="row g-4">
-                    {% for event in open_events %}
+                    {% for event in events %}
                         {% include 'components/event_card.html' with event=event %}
                     {% endfor %}
                 </div>

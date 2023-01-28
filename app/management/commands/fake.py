@@ -215,6 +215,7 @@ EVENT_LOCATIONS = [
 def create_data():
     event_types = 5
     events = 5
+    agendas = 5
     for x in REAL_USERS:
         user = models.User.objects.create(
             username=f'{x["first_name"]} {x["last_name"]}',
@@ -244,7 +245,7 @@ def create_data():
         models.EventTag.objects.create(name=tag)
 
     for i in range(events):
-        name = f"{ADJECTIVES[i]} {NOUNS[i]} Event"
+        name = f"{ADJECTIVES[i].capitalize()} {NOUNS[i].capitalize()} Event"
         location = random.choice(EVENT_LOCATIONS)
         location_url = 'https://www.google.com/maps/place/' + \
             location.replace(' ', '+')
@@ -254,6 +255,8 @@ def create_data():
         start_date = datetime.datetime.now() + datetime.timedelta(days=random.randint(-10, 10))
         end_date = start_date + datetime.timedelta(days=random.randint(1, 30))
         author = random.choice(models.User.objects.filter(is_superuser=False))
+        tags = random.sample(
+            list(models.EventTag.objects.all()), random.randint(1, 5))
         event = models.Event.objects.create(
             name=name,
             location=location,
@@ -265,8 +268,20 @@ def create_data():
             end_date=end_date,
             author=author,
         )
+        event.tags.set(tags)
         path = settings.MEDIA_ROOT + random.choice(EVENT_FILES)
         event.image.save(f'{name}.png', File(open(path, 'rb')))
+        event.save()
+        for i in range(agendas):
+            name = random.choice(AGENDA_NAMES)
+            start_date = event.start_date + \
+                datetime.timedelta(hours=random.randint(0, 24))
+
+            models.AgendaItem.objects.create(
+                name=name,
+                event=event,
+                start_date=start_date,
+            )
 
 
 def drop_db():

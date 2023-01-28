@@ -163,6 +163,7 @@ class Event(models.Model):
     end_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    tags = models.ManyToManyField('EventTag', blank=True)
 
     def __str__(self) -> str:
         return f'{self.name} ({self.type.name}): {self.start_date} - {self.end_date}'

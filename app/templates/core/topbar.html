@@ -14,7 +14,11 @@
 				<a href="\signup"><button class="btn btn-sm btn-outline-dark">Регистрация</button></a>
 			</div>
             {% else %}
-            <img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" class="rounded-circle" height='48' width='48'>
+				{% if user.image %}	
+					<img src="{{user.image.url}}" class="rounded-circle" height='36' width='36'>
+				{% else %}	
+					<img src="/static/assets/images/avatar/10.jpg" class="rounded-circle" height='36' width='36'>
+				{% endif %}	
 			{% endif %}
 		</div>
 	</nav>
