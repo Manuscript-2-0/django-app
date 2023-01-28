@@ -87,6 +87,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     # Временная метка показывающая время последнего обновления объекта.
     updated_at = models.DateTimeField(auto_now=True)
 
+    image = models.ImageField(upload_to=upload_to, null=True, blank=True)
+
     # Дополнительный поля, необходимые Django
     # при указании кастомной модели пользователя.
 
@@ -144,11 +146,18 @@ class User(AbstractBaseUser, PermissionsMixin):
 class EventType(models.Model):
     name = models.CharField(max_length=20)
 
+    def __str__(self):
+        return self.name
+
 
 class Event(models.Model):
     name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to=upload_to, null=True, blank=True)
+
+    location = models.CharField(max_length=100, default='Almaty, Kazakhstan')
+    location_url = models.URLField(blank=True, default='')
     description = models.TextField(blank=True)
-    image = models.FileField(upload_to=upload_to, null=True, blank=True)
+    full_description = models.TextField(blank=True)
     type = models.ForeignKey('EventType', on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()
@@ -157,6 +166,23 @@ class Event(models.Model):
 
     def __str__(self) -> str:
         return f'{self.name} ({self.type.name}): {self.start_date} - {self.end_date}'
+
+
+class AgendaItem(models.Model):
+    event = models.ForeignKey('Event', on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    start_date = models.DateTimeField()
+
+    def __str__(self):
+        return f'{self.name} ({self.event.name})'
+
+
+class EventTag(models.Model):
+    name = models.CharField(max_length=100)
+    icon = models.ImageField(upload_to=upload_to, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Ticket(models.Model):

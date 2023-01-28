@@ -9,10 +9,12 @@ from datetime import datetime
 
 
 def index(request):
-    open_events = models.Event.objects.filter(start_date__gte=datetime.now())
+    open_events = models.Event.objects.filter(
+        start_date__lte=datetime.now(), end_date__gte=datetime.now())
     context = {
         "open_events": open_events
     }
+
     return render(request, 'index.html', context=context)
 
 
@@ -41,3 +43,11 @@ def signup(request):
     if request.method == 'POST':
         pass
     return render(request, 'auth/signup.html')
+
+
+def event_details(request, event_id):
+    event = models.Event.objects.get(id=event_id)
+    context = {
+        "event": event
+    }
+    return render(request, 'event/index.html', context=context)
