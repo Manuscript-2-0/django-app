@@ -59,6 +59,16 @@ def event_details(request, event_id):
     return render(request, 'event/index.html', context=context)
 
 
+def event_teams(request, event_id):
+    event = models.Event.objects.get(id=event_id)
+    teams = models.Team.objects.filter(event=event)
+    context = {
+        "event": event,
+        "teams": teams
+    }
+    return render(request, 'event/teams.html', context=context)
+
+
 def events_by_tag(request, tag):
     events = models.Event.objects.filter(tags__name__in=[tag])
     context = {

@@ -115,7 +115,7 @@ Page content START -->
                                 <hr>
 								<!-- Buttons -->
 								<div class="mt-3 d-grid">
-									<a href="#" class="btn btn-success">{% if user.is_participant %} You are in! {% else %} Participate {% endif %}</a>
+									<a href="/events/{{event.id}}/teams" class="btn btn-success">{% if user.is_participant %} You are in! {% else %} Participate {% endif %}</a>
 								</div>
 								<!-- Divider -->
 							</div>

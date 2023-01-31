@@ -5,5 +5,7 @@ urlpatterns = [
     path('signup', views.signup, name='signup'),
     path('', views.index, name='index'),
     path('events/<int:event_id>', views.event_details, name='event_details'),
+    path('events/<int:event_id>/teams',
+         views.event_teams, name='event_teams'),
     path('events/tags/<str:tag>', views.events_by_tag, name='events_by_tag'),
 ]

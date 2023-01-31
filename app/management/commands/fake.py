@@ -8,6 +8,14 @@ from django.core.files import File
 import datetime
 from django.conf import settings
 
+TEAM_NAMES = [
+    'Team Spirit', 'Team Awesome', 'Team Cool', 'Team Fun', 'Team Adaptive',
+]
+REQUIRED_SKILLS = [
+    'Python', 'Java', 'C++', 'C#', 'JavaScript', 'HTML', 'CSS', 'PHP', 'SQL', 'Management', 'Videomaking'
+]
+
+
 REAL_USERS = [
     {
         'username': "timur.bakibayev@gmail.com",
@@ -28,6 +36,16 @@ REAL_USERS = [
         "username": "alex.pankratova@gmail.com",
         'first_name': 'Александра',
         'last_name': 'Панкратова',
+    },
+    {
+        "username": "erauezkhan@gmail.com",
+        'first_name': 'Ернар',
+        'last_name': 'Ауезхан',
+    },
+    {
+        "username": "saltanat.berdikulova@gmail.com",
+        'first_name': 'Салтанат',
+        'last_name': 'Бердикулова',
     },
 ]
 
@@ -245,6 +263,7 @@ def create_data():
         models.EventTag.objects.create(name=tag)
 
     for i in range(events):
+        team_num = random.randint(1, 5)
         name = f"{ADJECTIVES[i].capitalize()} {NOUNS[i].capitalize()} Event"
         location = random.choice(EVENT_LOCATIONS)
         location_url = 'https://www.google.com/maps/place/' + \
@@ -282,6 +301,36 @@ def create_data():
                 event=event,
                 start_date=start_date,
             )
+        for skill in REQUIRED_SKILLS:
+            models.RequiredSkill.objects.create(
+                name=skill,
+            )
+        for name in TEAM_NAMES:
+            t_name = name + " " + event.name
+            leader = random.choice(
+                models.User.objects.filter(is_superuser=True))
+            team = models.Team.objects.create(
+                name=t_name,
+                leader=leader,
+                event=event,
+            )
+            for i in range(random.randint(1, 5)):
+                skill = random.choice(
+                    list(models.RequiredSkill.objects.all()))
+                team.required_skills.add(skill)
+            for i in range(random.randint(1, 5)):
+                username = f'{team.name} {i}'
+                user = models.User.objects.create(
+                    username=username,
+                    email=f'team_member_{i}_{team.id}@gmail.com',
+                )
+                path = settings.MEDIA_ROOT + random.choice(USER_AVATARS)
+                user.image.save(
+                    f'team_member_{i}_{team.id}@gmail.com.png', File(open(path, 'rb')))
+                team.members.add(user)
+            path = settings.MEDIA_ROOT + random.choice(EVENT_FILES)
+            team.image.save(f'{name}.png', File(open(path, 'rb')))
+            team.save()
 
 
 def drop_db():

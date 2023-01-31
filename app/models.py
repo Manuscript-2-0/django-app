@@ -200,11 +200,22 @@ class Ticket(models.Model):
         return f'{self.user.username} - {self.event}'
 
 
+class RequiredSkill(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self) -> str:
+        return self.name
+
+
 class Team(models.Model):
     name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to=upload_to, null=True, blank=True)
+    leader = models.ForeignKey(
+        User, on_delete=models.CASCADE, blank=False, null=False, default=1)
     created_at = models.DateTimeField(auto_now_add=True)
-    users = models.ManyToManyField(User, related_name='teams')
+    members = models.ManyToManyField(User, related_name='teams')
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    required_skills = models.ManyToManyField(RequiredSkill, blank=True)
 
     def __str__(self) -> str:
         return self.name
