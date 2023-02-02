@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        {% include "core/head_part.html" %}
+
+      </head>
+
+<body>
+
+<!-- **************** MAIN CONTENT START **************** -->
+<main class="row m-0 p-0" style='min-height: 100vh'>	
+    <!-- left -->
+    {% include "team/form_left_content.html" %}
+
+    <!-- Right -->
+    <div class="col-6 m-auto">    
+        <h2 id="registration_topic"></h2>
+    
+        <!-- Form START -->
+        <form class="user" method="post" action="/events/{{event.id}}/teams/create" id="main_reg_form">
+            {% csrf_token %}
+            <!-- Name -->
+            
+            
+            <!-- Email -->
+            <div class="mb-4">
+                <label class="form-label">Название команды</label>
+                <div class="input-group input-group">
+                    <span class="input-group-text bg-light rounded-start border-0 text-secondary px-3"><i class="bi bi-envelope-fill"></i></span>
+                    <input type="text" name="name" class="form-control border-0 bg-light rounded-end ps-1" placeholder="Придумайте что-нибудь креативное!">
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Required Skills (up to 5)</label>
+                {% for i in '01234' %}
+                    {% include "components/dropdown_with_input.html" with options=skills placeholder='Skill' id=i %}
+                {% endfor %}
+            </div>
+            <div class="align-items-center mt-0">
+                <div class="d-grid">
+                    <button class="btn btn-primary mb-0" type="submit">Вперед</button>
+                </div>
+            </div>
+        </form>
+        <!-- Form END -->
+            
+    </div>
+</main>
+</body>
+
+</html>

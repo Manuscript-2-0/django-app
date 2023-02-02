@@ -3,7 +3,7 @@ import json
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-import api.models as models
+import app.models as models
 from datetime import datetime
 from django.utils import timezone
 
@@ -67,6 +67,30 @@ def event_teams(request, event_id):
         "teams": teams
     }
     return render(request, 'event/teams.html', context=context)
+
+
+def create_event_team(request, event_id):
+    event = models.Event.objects.get(id=event_id)
+    user = request.user
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        team = models.Team.objects.create(name=name, event=event, leader=user)
+        team.members.add(user)
+        for i in range(5):
+            skill_name = request.POST.get(f'option-{i}', '')
+            if skill_name:
+                if models.RequiredSkill.objects.filter(name=skill_name).exists():
+                    skill = models.RequiredSkill.objects.get(name=skill_name)
+                skill = models.RequiredSkill.objects.create(name=skill_name)
+                team.required_skills.add(skill)
+        team.save()
+        return redirect(f'/event/{event_id}/teams')
+    skills = models.RequiredSkill.objects.all()
+    context = {
+        "event": event,
+        "skills": skills
+    }
+    return render(request, 'team/team_form.html', context=context)
 
 
 def events_by_tag(request, tag):
