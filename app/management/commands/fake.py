@@ -50,25 +50,28 @@ REAL_USERS = [
 ]
 
 EVENT_FILES = [
-    'plugs/gsc.webp',
-    'plugs/hackathon.png',
-    'plugs/polkadot.jpeg',
+    'images/01.jpg',
+    'images/02.jpg',
+    'images/03.jpg',
+    'images/04.jpg',
+    'images/05.jpg',
+    'images/06.jpg',
 ]
 
 USER_AVATARS = [
-    'avatar/01.jpg',
-    'avatar/02.jpg',
-    'avatar/03.jpg',
-    'avatar/04.jpg',
-    'avatar/05.jpg',
+    'avatars/01.jpg',
+    'avatars/02.jpg',
+    'avatars/03.jpg',
+    'avatars/04.jpg',
+    'avatars/05.jpg',
 ]
 
 COMPANY_AVATARS = [
-    'avatar/06.jpg',
-    'avatar/07.jpg',
-    'avatar/08.jpg',
-    'avatar/09.jpg',
-    'avatar/10.jpg',
+    'avatars/06.jpg',
+    'avatars/07.jpg',
+    'avatars/08.jpg',
+    'avatars/09.jpg',
+    'avatars/10.jpg',
 ]
 
 REAL_COMPANIES = [

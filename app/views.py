@@ -2,11 +2,12 @@ from django.shortcuts import render
 import json
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 import app.models as models
 from datetime import datetime
 from django.utils import timezone
-
+import app.utils as utils
 # Create your views here.
 
 
@@ -70,11 +71,20 @@ def event_teams(request, event_id):
 
 
 def create_event_team(request, event_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('signin'))
     event = models.Event.objects.get(id=event_id)
     user = request.user
     if request.method == 'POST':
         name = request.POST.get('name', '')
-        team = models.Team.objects.create(name=name, event=event, leader=user)
+        team = models.Team.objects.create(
+            name=name, event=event, leader=user)
+        if request.FILES.get('file', None):
+            image_blob = request.FILES['file']
+            path = utils.handle_uploaded_file(image_blob, str(image_blob))
+            image = path
+            team.image = image
+            team.save()
         team.members.add(user)
         for i in range(5):
             skill_name = request.POST.get(f'option-{i}', '')
@@ -84,7 +94,7 @@ def create_event_team(request, event_id):
                 skill = models.RequiredSkill.objects.create(name=skill_name)
                 team.required_skills.add(skill)
         team.save()
-        return redirect(f'/event/{event_id}/teams')
+        return redirect(f'/events/{event_id}/teams')
     skills = models.RequiredSkill.objects.all()
     context = {
         "event": event,
