@@ -331,6 +331,15 @@ def create_data():
                 user.image.save(
                     f'team_member_{i}_{team.id}@gmail.com.png', File(open(path, 'rb')))
                 team.members.add(user)
+
+            for i in range(random.randint(1, 5)):
+                file = random.choice(EVENT_FILES)
+                models.TeamMaterial.objects.create(
+                    team=team, file=file, name=f'Important file number {i}')
+            for i in range(random.randint(1, 5)):
+                url = 'https://www.youtube.com/watch?v=QH2-TGUlwu4'
+                models.TeamMaterial.objects.create(
+                    team=team, url=url, name=f'Important url number {i}')
             path = settings.MEDIA_ROOT + random.choice(EVENT_FILES)
             team.image.save(f'{name}.png', File(open(path, 'rb')))
             team.save()

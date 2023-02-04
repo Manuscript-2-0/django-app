@@ -73,10 +73,14 @@ def event_teams(request, event_id):
 def event_teams_about(request, event_id, team_id):
     event = models.Event.objects.get(id=event_id)
     team = models.Team.objects.get(id=team_id)
+    team_materials = models.TeamMaterial.objects.filter(team=team)
     context = {
         "event": event,
         "team": team,
-        "is_leader": team.leader == request.user
+        "files": [material for material in team_materials if material.file],
+        "urls": [material for material in team_materials if material.url],
+        "is_leader": team.leader == request.user,
+        "is_member": request.user in team.members.all()
     }
     return render(request, 'team/index.html', context=context)
 

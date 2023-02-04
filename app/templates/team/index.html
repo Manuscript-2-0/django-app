@@ -30,44 +30,79 @@
             </div>
     </div>
 </section>
-<!-- Main content START -->
-<div class="col-xl-9">
-    <!-- Card START -->
-    <div class="card border bg-transparent rounded-3">
-        <!-- Card body START -->
-        <div class="card-body">
+<section class="pt-3">
+    <!-- Main content START -->
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-9">
+                <!-- Card START -->
+                <div class="card border bg-transparent rounded-3">
+                    <!-- Card body START -->
+                    <div class="card-body">
 
-            <!-- Student list table START -->
-            <div class="table-responsive border-0">
-                <table class="table table-dark-gray align-middle p-4 mb-0 table-hover">
-                    <!-- Table head -->
-                    <thead>
-                        <tr>
-                            <th scope="col" class="border-0 rounded-start">Имя участника</th>
-                            <th scope="col" class="border-0">Progress</th>
-                            <th scope="col" class="border-0">Courses</th>
-                            <th scope="col" class="border-0">Enrolled date</th>
-                            {% if is_leader %}
-                            <th scope="col" class="border-0 rounded-end">Action</th>
-                            {% endif %}
-                        </tr>
-                    </thead>
+                        <!-- Student list table START -->
+                        <div class="table-responsive border-0">
+                            <table class="table table-dark-gray align-middle p-4 mb-0 table-hover">
+                                <!-- Table head -->
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="border-0 rounded-start">Имя участника</th>
+                                        <th scope="col" class="border-0">Progress</th>
+                                        <th scope="col" class="border-0">Courses</th>
+                                        <th scope="col" class="border-0">Enrolled date</th>
+                                        {% if is_leader %}
+                                        <th scope="col" class="border-0 rounded-end">Action</th>
+                                        {% endif %}
+                                    </tr>
+                                </thead>
 
-                    <!-- Table body START -->
-                    <tbody>
-                        {% for participant in team.members.all %}
-                            {% include 'components/team_participant_card.html' with participant=participant is_leader=is_leader%}
-                        {% endfor %}
-                    </tbody>
-                    <!-- Table body END -->
-                </table>
+                                <!-- Table body START -->
+                                <tbody>
+                                    {% for participant in team.members.all %}
+                                        {% include 'components/team_participant_card.html' with participant=participant is_leader=is_leader%}
+                                    {% endfor %}
+                                </tbody>
+                                <!-- Table body END -->
+                            </table>
+                        </div>
+                        <!-- Student list table END -->
+                    </div>
+                    <!-- Card body START -->
+                </div>
+                <!-- Card END -->
             </div>
-            <!-- Student list table END -->
+
+            <div class="col-xl-3">
+                <!-- Responsive offcanvas body START -->
+                <nav class="navbar navbar-light navbar-expand-xl mx-0">
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                        <!-- Offcanvas body -->
+                        <div class="offcanvas-body p-3 p-xl-0">
+                            <div class="bg-dark border rounded-3 pb-0 p-3 w-100">
+                                <!-- Dashboard menu -->
+                                {% if is_member %}
+                                <div class="list-group list-group-dark list-group-borderless">
+                                    <h5 class="list-group-item" href="instructor-dashboard.html"><i class="bi bi-card-text fa-fw me-2"></i>Файлы команды</h5>
+                                    {% for file in files %}
+                                        <a class="list-group-item" href="{{file.file}}">{{file.name}}</a>
+                                    {% endfor %}
+                                    <h5 class="list-group-item" href="instructor-manage-course.html"><i class="bi bi-globe fa-fw me-2"></i>Полезные ссылки</h5>
+                                    {% for url in urls %}
+                                        <a class="list-group-item" href="{{url.url}}">{{url.name}}</a>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <h5 class="text-white" href="instructor-dashboard.html">Материалы команды доступны только для ее участников</h5>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+                <!-- Responsive offcanvas body END -->
+            </div>
         </div>
-        <!-- Card body START -->
     </div>
-    <!-- Card END -->
-</div>
+</section>
 <!-- Main content END -->
 		</div><!-- Row END -->
 	</div>
