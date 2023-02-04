@@ -70,6 +70,17 @@ def event_teams(request, event_id):
     return render(request, 'event/teams.html', context=context)
 
 
+def event_teams_about(request, event_id, team_id):
+    event = models.Event.objects.get(id=event_id)
+    team = models.Team.objects.get(id=team_id)
+    context = {
+        "event": event,
+        "team": team,
+        "is_leader": team.leader == request.user
+    }
+    return render(request, 'team/index.html', context=context)
+
+
 def create_event_team(request, event_id):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('signin'))
