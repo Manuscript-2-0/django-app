@@ -73,16 +73,81 @@ def event_teams(request, event_id):
 def event_teams_about(request, event_id, team_id):
     event = models.Event.objects.get(id=event_id)
     team = models.Team.objects.get(id=team_id)
-    team_materials = models.TeamMaterial.objects.filter(team=team)
+    user = request.user
     context = {
         "event": event,
         "team": team,
-        "files": [material for material in team_materials if material.file],
-        "urls": [material for material in team_materials if material.url],
-        "is_leader": team.leader == request.user,
-        "is_member": request.user in team.members.all()
     }
+    if team.leader == user:
+        team_materials = models.TeamMaterial.objects.filter(team=team)
+        join_requests = models.ActionNotification.objects.filter(
+            team=team, action_type=models.ActionNotification.JOIN_REQUEST)
+        context.update({
+            "files": [material for material in team_materials if material.file],
+            "urls": [material for material in team_materials if material.url],
+            "join_requests": join_requests,
+            "is_leader": True,
+            "is_member": True,
+        })
+    elif user in team.members.all():
+        team_materials = models.TeamMaterial.objects.filter(team=team)
+        context.update({
+            "files": [material for material in team_materials if material.file],
+            "urls": [material for material in team_materials if material.url],
+            "is_member": True,
+        })
+    else:
+        join_requests = models.ActionNotification.objects.filter(
+            user=user, team=team, action_type=models.ActionNotification.JOIN_REQUEST)
+        context.update({
+            "join_requests": join_requests,
+        })
     return render(request, 'team/index.html', context=context)
+
+
+def event_teams_request_join_create(request, event_id, team_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('signin'))
+    event = models.Event.objects.get(id=event_id)
+    team = models.Team.objects.get(id=team_id)
+    user = request.user
+    message = f"Пользователь {user} хочет присоединиться к команде {team}"
+    action_type = models.ActionNotification.JOIN_REQUEST
+    if models.ActionNotification.objects.filter(user=user, action_type=action_type, team=team).exists():
+        return redirect(f"events/{event.id}/teams/{team.id}/about?request_sent=false")
+
+    models.ActionNotification.objects.create(
+        message=message, action_type=action_type, team=team, user=user)
+    return redirect(f"/events/{event.id}/teams/{team.id}/about")
+
+
+def event_teams_request_join_accept(join_request, event_id, team_id, join_request_id):
+    if not join_request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('signin'))
+    event = models.Event.objects.get(id=event_id)
+    team = models.Team.objects.get(id=team_id)
+    user = join_request.user
+    if team.leader != user:
+        return HttpResponse(status=403)
+    join_request = models.ActionNotification.objects.get(id=join_request_id)
+    join_request.is_accepted = True
+    join_request.save()
+    team.members.add(join_request.user)
+    return redirect(f"/events/{event.id}/teams/{team.id}/about")
+
+
+def event_teams_request_join_decline(join_request, event_id, team_id, join_request_id):
+    if not join_request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('signin'))
+    event = models.Event.objects.get(id=event_id)
+    team = models.Team.objects.get(id=team_id)
+    user = join_request.user
+    if team.leader != user:
+        return HttpResponse(status=403)
+    join_request = models.ActionNotification.objects.get(id=join_request_id)
+    join_request.is_accepted = False
+    join_request.save()
+    return redirect(f"/events/{event.id}/teams/{team.id}/about")
 
 
 def create_event_team(request, event_id):

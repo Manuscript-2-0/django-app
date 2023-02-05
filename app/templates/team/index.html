@@ -9,27 +9,7 @@
 {% include "core/topbar.html"%}
 <!-- **************** MAIN CONTENT START **************** -->
 <main>
-<section class="bg-dark align-items-center d-flex" style="background:url(assets/images/pattern/04.png) no-repeat center center; background-size:cover;">
-    <!-- Main banner background image -->
-    <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <!-- Title -->
-                    <h1 class="text-white">{{team.name}}</h1>
-                    <!-- Breadcrumb -->
-                    <div class="d-flex">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb breadcrumb-dark breadcrumb-dots mb-0">
-                                <li class="breadcrumb-item"><a href="/">Events</a></li>
-                                <li class="breadcrumb-item" ><a href="/events/{{event.id}}">{{event.name}}</a></li>
-                                <li class="breadcrumb-item active" >{{team.name}}</li>
-                            </ol>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-    </div>
-</section>
+    {% include "components/banner.html" with page='team_details' %}
 <section class="pt-3">
     <!-- Main content START -->
     <div class="container">
@@ -39,33 +19,10 @@
                 <div class="card border bg-transparent rounded-3">
                     <!-- Card body START -->
                     <div class="card-body">
-
-                        <!-- Student list table START -->
-                        <div class="table-responsive border-0">
-                            <table class="table table-dark-gray align-middle p-4 mb-0 table-hover">
-                                <!-- Table head -->
-                                <thead>
-                                    <tr>
-                                        <th scope="col" class="border-0 rounded-start">Имя участника</th>
-                                        <th scope="col" class="border-0">Должность</th>
-                                        <th scope="col" class="border-0">Courses</th>
-                                        <th scope="col" class="border-0">Enrolled date</th>
-                                        {% if is_leader %}
-                                        <th scope="col" class="border-0 rounded-end">Action</th>
-                                        {% endif %}
-                                    </tr>
-                                </thead>
-
-                                <!-- Table body START -->
-                                <tbody>
-                                    {% for member in team.members.all %}
-                                        {% include 'components/team_participant_card.html' with member=member is_leader=is_leader%}
-                                    {% endfor %}
-                                </tbody>
-                                <!-- Table body END -->
-                            </table>
-                        </div>
-                        <!-- Student list table END -->
+                        {% include "components/team_participants_table.html"%}
+                        {% if is_leader %}
+                            {% include "components/team_join_requests_table.html"%}
+                        {% endif %}
                     </div>
                     <!-- Card body START -->
                 </div>
@@ -74,13 +31,13 @@
 
             <div class="col-xl-3">
                 <!-- Responsive offcanvas body START -->
+                {% if is_member %}
                 <nav class="navbar navbar-light navbar-expand-xl mx-0">
                     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                         <!-- Offcanvas body -->
                         <div class="offcanvas-body p-3 p-xl-0">
                             <div class="bg-dark border rounded-3 pb-0 p-3 w-100">
                                 <!-- Dashboard menu -->
-                                {% if is_member %}
                                 <div class="list-group list-group-dark list-group-borderless">
                                     <h5 class="list-group-item" href="instructor-dashboard.html"><i class="bi bi-card-text fa-fw me-2"></i>Файлы команды</h5>
                                     {% for file in files %}
@@ -91,13 +48,15 @@
                                         <a class="list-group-item" href="{{url.url}}">{{url.name}}</a>
                                     {% endfor %}
                                 </div>
-                                {% else %}
-                                <h5 class="text-white" href="instructor-dashboard.html">Материалы команды доступны только для ее участников</h5>
-                                {% endif %}
                             </div>
                         </div>
                     </div>
                 </nav>
+                {% elif join_requests %}
+                    <button class="btn btn-info deactive" disabled href="">Ваша заявка рассматривается</button>
+                {% else %}
+                    <a class="btn btn-primary" href="/events/{{event.id}}/teams/{{team.id}}/join_requests/create">Присоединиться к команде</a>
+                {% endif %}
                 <!-- Responsive offcanvas body END -->
             </div>
         </div>

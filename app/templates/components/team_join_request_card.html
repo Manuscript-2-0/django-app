@@ -1,0 +1,41 @@
+<tr>
+    <!-- Table data -->
+    <td>
+        <div class="d-flex align-items-center position-relative">
+            <!-- Image -->
+            <div class="avatar avatar-md mb-2 mb-md-0">
+                <img src="{{join_request.user.image.url}}" class="rounded" alt="">
+            </div>
+            <div class="mb-0 ms-2">
+                <!-- Title -->
+                <h6 class="mb-0"><a href="#" class="stretched-link">{{join_request.user.get_full_name}}</a></h6>
+                <!-- Address -->
+                <span class="text-body small"><i class="fas fa-fw fa-map-marker-alt me-1 mt-1"></i>Kazakhstan</span>
+            </div>
+        </div>
+    </td>
+
+    <!-- Table data -->
+    <td class="text-center text-sm-start">
+        {% if join_request.is_accepted == True %}
+            <span class="badge bg-success">Accepted</span>
+        {% elif join_request.is_accepted == False %}
+            <span class="badge bg-danger">Rejected</span>
+        {% else %}
+            <span class="badge bg-warning">Pending</span>
+        {% endif %}
+    </td>
+
+    <!-- Table data -->
+    <td>{{join_request.created_at}}</td>
+
+    <!-- Table data -->
+    <td class='d-flex'>
+        {% if join_request.is_accepted == None %}
+        <a href="/events/{{event.id}}/teams/{{team.id}}/join_requests/{{join_request.id}}/accept" class="btn btn-success-soft ">Accept</a>
+        <a href="/events/{{event.id}}/teams/{{team.id}}/join_requests/{{join_request.id}}/decline" class="btn btn-danger-soft ">Decline</a>
+        {% else %}
+        <span></span>
+        {% endif %}
+    </td>
+</tr>

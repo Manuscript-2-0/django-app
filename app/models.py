@@ -229,3 +229,21 @@ class TeamMaterial(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+
+class ActionNotification(models.Model):
+    JOIN_REQUEST = 'join_request'
+    INVITE_REQUEST = 'invite_request'
+    KICK = 'kick'
+    NOTIFICATION_TYPES = [
+        (JOIN_REQUEST, JOIN_REQUEST), (INVITE_REQUEST, INVITE_REQUEST), (KICK, KICK)]
+    message = models.CharField(max_length=100)
+    action_type = models.CharField(
+        max_length=20, choices=NOTIFICATION_TYPES, default='join')
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_accepted = models.BooleanField(null=True, blank=True)
+
+    def __str__(self) -> str:
+        return f'{self.user.username} - {self.message}'

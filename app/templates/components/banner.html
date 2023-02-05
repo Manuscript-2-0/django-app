@@ -1,0 +1,28 @@
+<section class="bg-dark align-items-center d-flex" style="background:url(assets/images/pattern/04.png) no-repeat center center; background-size:cover;">
+    <!-- Main banner background image -->
+    <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <!-- Title -->
+                    <h1 class="text-white">Manuscript App</h1>
+                    <!-- Breadcrumb -->
+                    <div class="d-flex">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb breadcrumb-dark breadcrumb-dots mb-0">
+                                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                                {% if page == 'event_about' or page == 'event_teams' or page == 'team_details'%}
+                                    <li class="breadcrumb-item" ><a href="/events/{{event.id}}">{{event.name}}</a></li>
+                                {% endif %}
+                                {% if page == 'event_teams' or page == 'team_details' %}
+                                    <li class="breadcrumb-item" ><a href="/events/{{event.id}}/teams">Teams</a></li>
+                                {% endif %}
+                                {% if page == 'team_details' %}
+                                    <li class="breadcrumb-item active"><a href="/events/{{event.id}}/teams/{{team.id}}">{{team.name}}</a></li>
+                                {% endif %}
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+    </div>
+</section>
