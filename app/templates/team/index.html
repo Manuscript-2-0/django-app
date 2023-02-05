@@ -47,7 +47,7 @@
                                 <thead>
                                     <tr>
                                         <th scope="col" class="border-0 rounded-start">Имя участника</th>
-                                        <th scope="col" class="border-0">Progress</th>
+                                        <th scope="col" class="border-0">Должность</th>
                                         <th scope="col" class="border-0">Courses</th>
                                         <th scope="col" class="border-0">Enrolled date</th>
                                         {% if is_leader %}
@@ -58,8 +58,8 @@
 
                                 <!-- Table body START -->
                                 <tbody>
-                                    {% for participant in team.members.all %}
-                                        {% include 'components/team_participant_card.html' with participant=participant is_leader=is_leader%}
+                                    {% for member in team.members.all %}
+                                        {% include 'components/team_participant_card.html' with member=member is_leader=is_leader%}
                                     {% endfor %}
                                 </tbody>
                                 <!-- Table body END -->

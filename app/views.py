@@ -94,12 +94,14 @@ def create_event_team(request, event_id):
         name = request.POST.get('name', '')
         team = models.Team.objects.create(
             name=name, event=event, leader=user)
+        image = 'images/02.jpg'
         if request.FILES.get('file', None):
             image_blob = request.FILES['file']
             path = utils.handle_uploaded_file(image_blob, str(image_blob))
             image = path
-            team.image = image
-            team.save()
+        team.image = image
+        team.save()
+
         team.members.add(user)
         for i in range(5):
             skill_name = request.POST.get(f'option-{i}', '')

@@ -11,6 +11,8 @@ urlpatterns = [
          views.event_teams_about, name='event_teams_about'),
     #     path('events/<int:event_id>/teams/<int:team_id>/join',
     #          views.event_teams_join, name='event_teams_join'),
+    #     path('events/<int:event_id>/teams/<int:team_id>/members/<int:user_id>/kick',
+    #          views.event_teams_join, name='event_teams_join'),
     path('events/<int:event_id>/teams/create',
          views.create_event_team, name='create_event_team'),
     path('events/tags/<str:tag>', views.events_by_tag, name='events_by_tag'),
