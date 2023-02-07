@@ -235,8 +235,9 @@ class ActionNotification(models.Model):
     JOIN_REQUEST = 'join_request'
     INVITE_REQUEST = 'invite_request'
     KICK = 'kick'
+    MEMBER_LEFT = 'member_left'
     NOTIFICATION_TYPES = [
-        (JOIN_REQUEST, JOIN_REQUEST), (INVITE_REQUEST, INVITE_REQUEST), (KICK, KICK)]
+        (JOIN_REQUEST, JOIN_REQUEST), (INVITE_REQUEST, INVITE_REQUEST), (KICK, KICK), (MEMBER_LEFT, MEMBER_LEFT)]
     message = models.CharField(max_length=100)
     action_type = models.CharField(
         max_length=20, choices=NOTIFICATION_TYPES, default='join')

@@ -27,13 +27,11 @@
     <td>4/1/2022</td>
 
     <!-- Table data -->
-    {% if is_leader%}
     <td>
-        {% if user != member %}
+        {% if user == member %}
+        <a href="/events/{{event.id}}/teams/{{team.id}}/leave" class='btn btn-danger'>Leave</a>
+        {% elif is_leader %}
         <a href="/events/{{event.id}}/teams/{{team.id}}/members/{{member.id}}/kick" class="btn btn-danger-soft">Kick</a>
-        {% else %}
-        <button class='btn btn-danger'>Leave</button>
         {% endif %}
     </td>
-    {% endif %}
 </tr>

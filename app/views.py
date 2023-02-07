@@ -150,6 +150,44 @@ def event_teams_request_join_decline(join_request, event_id, team_id, join_reque
     return redirect(f"/events/{event.id}/teams/{team.id}/about")
 
 
+def event_teams_kick_member(request, event_id, team_id, member_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('signin'))
+    event = models.Event.objects.get(id=event_id)
+    team = models.Team.objects.get(id=team_id)
+    user = request.user
+    if team.leader != user:
+        return HttpResponse(status=403)
+    member = models.User.objects.get(id=member_id)
+    message = f"Пользователь {user} исключил вас из команды {team}"
+    action_type = models.ActionNotification.KICK
+    models.ActionNotification.objects.create(
+        message=message, action_type=action_type, team=team, user=user)
+    team.members.remove(member)
+    return redirect(f"/events/{event.id}/teams/{team.id}/about")
+
+
+def event_teams_leave(request, event_id, team_id):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('signin'))
+    event = models.Event.objects.get(id=event_id)
+    team = models.Team.objects.get(id=team_id)
+    user = request.user
+    if user not in team.members.all():
+        return HttpResponse(status=403)
+    message = f"Пользователь {user} покинул команду {team}"
+    action_type = models.ActionNotification.MEMBER_LEFT
+    models.ActionNotification.objects.create(
+        message=message, action_type=action_type, team=team, user=user)
+    team.members.remove(user)
+    if team.members.count() == 0:
+        team.delete()
+    elif team.leader == user:
+        team.leader = team.members.first()
+        team.save()
+    return redirect(f"/events/{event.id}/teams/{team.id}/about")
+
+
 def create_event_team(request, event_id):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('signin'))
